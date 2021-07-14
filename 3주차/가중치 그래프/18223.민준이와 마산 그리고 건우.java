@@ -1,3 +1,7 @@
+/*
+ * PriorityQueue 초기화를 안 해줘서 틀렸었음
+ * 부들부들... 내 로직을 의심하지 말고, 코드를 한 번 더 돌아보자!
+ */
 import java.io.*;
 import java.util.*;
 
@@ -32,15 +36,14 @@ public class Main {
 			list[b].add(new Node(a, c));
 		}
 		
-		pq = new PriorityQueue<>();
 		cost = new int[v+1];
 		visited = new boolean[v+1];
 		
-		if (dijkstra(1, p) + dijkstra(p, v) == dijkstra(1, v)) {
-			bw.append("SAVE HIM");
+		if (dijkstra(1, p) + dijkstra(p, v) > dijkstra(1, v)) {
+			bw.append("GOOD BYE");
 		}
 		else {
-			bw.append("GOOD BYE");
+			bw.append("SAVE HIM");
 		}
 		
 		bw.flush();
@@ -52,6 +55,8 @@ public class Main {
 	private static int dijkstra (int start, int end) {
 		Arrays.fill(cost, INF);
 		Arrays.fill(visited, false);
+		pq = new PriorityQueue<>();
+        
 		cost[start] = 0;
 		pq.offer(new Node(start, 0));
 		
