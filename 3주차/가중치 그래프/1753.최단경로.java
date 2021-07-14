@@ -2,81 +2,88 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+	static int v;
+	static final int INF = 1000000000;
+	static int[] distance;
+	static boolean[] visited;
+	static ArrayList<Node>[] list;
+	static PriorityQueue<Node> pq;
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine().trim());
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		int V = Integer.parseInt(st.nextToken());
-		int E = Integer.parseInt(st.nextToken());
-		int start = Integer.parseInt(br.readLine().trim());
-		final int INFINITY = Integer.MAX_VALUE;
+		v = Integer.parseInt(st.nextToken());
+		int e = Integer.parseInt(st.nextToken());
+		int k = Integer.parseInt(br.readLine());
 		
-		// 정점 간 연결된 간선 정보 저장하기 위해 ArrayList 사용
-		ArrayList<Node>[] list = new ArrayList[V+1];
-		for (int i = 1; i <= V; i++) {
-			// 정점 i와 인접한 다른 정점들 정보가 리스트에 저장됨
-			list[i] = new ArrayList<Node>();
+		list = new ArrayList[v+1];
+		for (int i = 1; i <= v; i++) {
+			list[i] = new ArrayList<>();
+		}
+		distance = new int[v+1];
+		visited = new boolean[v+1];
+		pq = new PriorityQueue<>();
+		
+		for (int i = 0; i < e; i++) {
+			st = new StringTokenizer(br.readLine());
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+			int cost = Integer.parseInt(st.nextToken());
+			list[from].add(new Node(to, cost));
 		}
 		
-		int[] distance = new int[V+1];	// 시작점 ~ 각 정점 최소비용
-		Arrays.fill(distance, INFINITY);
-		boolean[] visited = new boolean[V+1];
+		dijkstra(k);
 		
-		// data input
-		for (int i = 0; i < E; i++) {
-			st = new StringTokenizer(br.readLine().trim());
-			int v1 = Integer.parseInt(st.nextToken());		// from
-			int v2 = Integer.parseInt(st.nextToken());		// to
-			int weight = Integer.parseInt(st.nextToken());	// distance
-			
-			// v1 -> v2
-			list[v1].add(new Node(v2, weight));
+		for (int i = 1; i <= v; i++) {
+			bw.append(distance[i] == INF ? "INF" : String.valueOf(distance[i]));
+			bw.newLine();
 		}
 		
-		PriorityQueue<Node> q = new PriorityQueue<Node>();
-		distance[start] = 0; // 시작 정점 ~ start 까지의 최소비용
-		q.add(new Node(start, 0));
+		bw.flush();
+		br.close();
+		bw.close();
 		
-		while(!q.isEmpty()) {
-			int num = q.poll().no; // 정점의 번호
+	}
+	
+	private static void dijkstra (int start) {
+		Arrays.fill(visited, false);
+		Arrays.fill(distance, INF);
+		distance[start] = 0;
+		pq.offer(new Node(start, 0));
+		
+		while(!pq.isEmpty()) {
+			Node cur = pq.poll();
 			
-			if (visited[num])
-				continue;
+			if (visited[cur.vertex]) continue;
+			visited[cur.vertex] = true;
 			
-			visited[num] = true;
-			for (Node node : list[num]) {
-				// distance[node.no] : ArrayList에서 꺼낸 노드 1개의 번호 기준 정점의 최소 비용
-				// distance[num] : 시작 정점 ~ num번째 정점까지의 최소 비용
-				// node.distance : 
-				if (distance[node.no] > distance[num] + node.distance) {
-					distance[node.no] = distance[num] + node.distance;
-					q.add(new Node(node.no, distance[node.no]));
+			for (Node node : list[cur.vertex]) {
+				if (distance[node.vertex] > distance[cur.vertex] + node.cost) {
+					distance[node.vertex] = distance[cur.vertex] + node.cost;
+					pq.offer(new Node(node.vertex, distance[node.vertex]));
 				}
 			}
-		}
-		for (int i = 1; i <= V; i++) {
-			if (distance[i] == INFINITY)
-				System.out.println("INF");
-			else
-				System.out.println(distance[i]);
 		}
 		
 	}
 	
-	private static class Node implements Comparable<Node>{
-		int no;
-		int distance;
+	static class Node implements Comparable<Node> {
+		int vertex;
+		int cost;
 		
-		public Node(int vertex, int totalDistance) {
-			this.no = vertex;
-			this.distance = totalDistance;
+		public Node (int vertex, int cost) {
+			this.vertex = vertex;
+			this.cost = cost;
 		}
-
+		
 		@Override
-		public int compareTo(Node o) {
-			return this.distance-o.distance;
+		public int compareTo (Node o) {
+			return this.cost - o.cost;
 		}
+		
 	}
+	
 
 }
