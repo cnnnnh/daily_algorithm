@@ -1,2 +1,4 @@
-# step_by_step_BOJ
-BOJ 단계별로 풀기
+# daily_algorithm
+1일 1문제 알고리즘 풀기!
+
+제발!
