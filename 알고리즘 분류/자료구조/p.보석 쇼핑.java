@@ -2,50 +2,50 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] gems) {
-        HashSet<String> set = new HashSet<>();              // º¸¼® Á¾·ù °³¼ö
-        HashMap<String, Integer> map = new HashMap<>();     // º¸¼®°ú °³¼ö
-        Queue<String> q = new LinkedList<>();               // ÇöÀç ´ã°íÀÖ´Â º¸¼®µé
+        HashSet<String> set = new HashSet<>();              // ë³´ì„ ì¢…ë¥˜ ê°œìˆ˜
+        HashMap<String, Integer> map = new HashMap<>();     // ë³´ì„ê³¼ ê°œìˆ˜
+        Queue<String> q = new LinkedList<>();               // í˜„ì¬ ë‹´ê³ ìˆëŠ” ë³´ì„ë“¤
         int[] answer = new int[] {1, gems.length};
         int index = 0;
         int len = gems.length;
-        
-        // º¸¼® Á¾·ù ´ã±â
+
+        // ë³´ì„ ì¢…ë¥˜ ë‹´ê¸°
         for(int i = 0; i < gems.length; i++) {
             set.add(gems[i]);
         }
-        
+
         for(int i = 0; i < gems.length; i++) {
-            // º¸¼® ¾µ¾î´ã±â ½ÃÀÛ
+            // ë³´ì„ ì“¸ì–´ë‹´ê¸° ì‹œì‘
             if(map.containsKey(gems[i])) map.put(gems[i], map.get(gems[i]) + 1);
             else map.put(gems[i], 1);
-            
-            // ´ãÀº º¸¼® ¸®½ºÆ®¿¡ Ãß°¡
+
+            // ë‹´ì€ ë³´ì„ ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
             q.offer(gems[i]);
-            
+
             while(true) {
                 String gem = q.peek();
-                // 2°³ ÀÌ»ó ÀÖ´Â º¸¼®ÀÌ¸é »©±â
+                // 2ê°œ ì´ìƒ ìˆëŠ” ë³´ì„ì´ë©´ ë¹¼ê¸°
                 if(map.get(gem) > 1) {
                     q.poll();
                     map.put(gem, map.get(gem) - 1);
-                    // ½ÃÀÛ ÀÎµ¦½º º¯°æ
+                    // ì‹œì‘ ì¸ë±ìŠ¤ ë³€ê²½
                     index++;
                 }
-                // 1°³ ÀÌÇÏ ÀÖ´Â º¸¼®ÀÌ¸é ¾È »©°í, ´Ù¸¥ º¸¼® ´õ ³Ö±â
+                // 1ê°œ ì´í•˜ ìˆëŠ” ë³´ì„ì´ë©´ ì•ˆ ë¹¼ê³ , ë‹¤ë¥¸ ë³´ì„ ë” ë„£ê¸°
                 else break;
             }
-            
-            // º¸¼® Á¾·ù ÃÑ °³¼ö == °¡Áö°í ÀÖ´Â º¸¼® Á¾·ù °³¼ö,
-            // °¡Áö°í ÀÖ´Â º¸¼® °³¼ö < ÀÌÀü ÃÖ¼Ò º¸¼® °³¼öÀÏ ¶§
+
+            // ë³´ì„ ì¢…ë¥˜ ì´ ê°œìˆ˜ == ê°€ì§€ê³  ìˆëŠ” ë³´ì„ ì¢…ë¥˜ ê°œìˆ˜,
+            // ê°€ì§€ê³  ìˆëŠ” ë³´ì„ ê°œìˆ˜ < ì´ì „ ìµœì†Œ ë³´ì„ ê°œìˆ˜ì¼ ë•Œ
             if(set.size() == map.size() && len > q.size()) {
                 len = q.size();
                 answer[0] = index + 1;
                 answer[1] = index + len;
             }
-            
+
         }
-        
-        
+
+
         return answer;
     }
 }
