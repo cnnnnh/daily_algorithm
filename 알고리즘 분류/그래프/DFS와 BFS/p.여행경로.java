@@ -1,6 +1,10 @@
 import java.util.*;
 
-// ë‹¤ì‹œ í’€ì–´ë³¼ ê²ƒ!
+/*
+ Å·°«Á¦³Ê·² ¾Ë°í¸®Áò °í¼ö´ÔÀÇ µµ¿òÀ» ¹Þ¾Æ Åë°ú!
+ Á¤·Ä ½Ç¼ö... ¤¶¤©¤¡ ¤¸¤²...
+ c++ ÇÏ¶ó´Â °í¼ö´ÔÀÇ ¿µ¾÷À» ¹Þ¾Ò´Ù ¤»¤»¤»¤»¤»
+*/
 
 class Solution {
     
@@ -21,16 +25,15 @@ class Solution {
         }
         Collections.sort(list);
         
-        dfs("", "ICN", 0);
+        dfs("ICN", 0);
         
         return answer;
     }
     
-    public static void dfs(String start, String end, int cnt) {
-        if(flag) return;
+    public static void dfs(String spot, int cnt) {
+        airport[cnt] = spot;
         
         if(cnt == list.size()) {
-            airport[cnt] = end;
             answer = airport;
             flag = true;
             return;
@@ -38,10 +41,10 @@ class Solution {
         
         for(int i = 0; i < list.size(); i++) {
             Ticket t = list.get(i);
-            if (!visited[i] && t.start.equals(end)) {
+            if (!visited[i] && t.start.equals(spot)) {
                 visited[i] = true;
-                airport[cnt] = end;
-                dfs(end, t.end, cnt+1);
+                dfs(t.end, cnt+1);
+                if(flag) return;
                 visited[i] = false;
             }
         }
@@ -61,7 +64,8 @@ class Solution {
                 if(t.end.compareTo(this.end) > 0) return -1;
                 return 1;
             }
-            return -1;
+            else if(t.start.compareTo(this.start) > 0) return -1;
+            else return 1;
         }
     }
 }
